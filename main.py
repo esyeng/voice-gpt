@@ -56,7 +56,7 @@ def get_audio():
             print("You said", said)
 
             if "" in said:
-                speak("Yes Goddess?")
+                speak("Yes Adam?")
                 messages = [
                     {"role": "system", "content": "You are a sassy assistant"},
                     {"role": "user", "content": said}
