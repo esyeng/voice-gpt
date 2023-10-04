@@ -9,7 +9,6 @@ from gtts import gTTS
 from initialize import init_openai
 
 
-
 logging.basicConfig(level=logging.ERROR)  # Configures logging to show errors
 lang = "en"
 
@@ -82,8 +81,8 @@ def get_audio():
 
     return said
 
+
 while True:
     result = get_audio()
     if result == "stop":
         break
-
