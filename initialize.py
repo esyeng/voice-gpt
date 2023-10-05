@@ -1,14 +1,13 @@
 import openai
-import os
-from dotenv import load_dotenv
+from secret import api_key
 
 
 def init_openai():
-    load_dotenv()
-    openai.api_key = os.getenv("API_KEY")
+    openai.api_key = api_key
     print("Key loaded.")
+    print("OpenAI API version: " + openai.__version__)
+    print(openai.Engine.list())
 
 
 if __name__ == '__main__':
     init_openai()
-

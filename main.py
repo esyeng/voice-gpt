@@ -5,9 +5,9 @@ import threading
 import speech_recognition as sr
 import logging
 import traceback
+import random
 from gtts import gTTS
 from initialize import init_openai
-
 
 
 logging.basicConfig(level=logging.ERROR)  # Configures logging to show errors
@@ -31,8 +31,8 @@ def speak(text: str):
     """
     is_speaking.set()  # Signal that the program is speaking
     speech = gTTS(text=text, lang=lang, slow=False, tld="ie")
-    speech.save("output.mp3")
-    playsound.playsound("output.mp3")  # Play the audio
+    output = "output%r.mp3" % (random.sample(range(1, 1000), 1))
+    playsound.playsound(output)  # Play the audio
     time.sleep(len(text) * 0.06)  # Rough estimation to ensure the event clears after the text is spoken
     is_speaking.clear()  # Reset the speaking flag
 
@@ -81,6 +81,7 @@ def get_audio():
             logging.error(traceback.format_exc())  # This will print the entire stack trace
 
     return said
+
 
 while True:
     result = get_audio()
