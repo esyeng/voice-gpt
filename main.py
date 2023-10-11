@@ -1,11 +1,11 @@
+import os.path
 import openai
-import playsound
 import time
 import threading
 import speech_recognition as sr
 import logging
 import traceback
-import random
+import pygame
 from gtts import gTTS
 from initialize import init_openai
 
@@ -31,10 +31,22 @@ def speak(text: str):
     """
     is_speaking.set()  # Signal that the program is speaking
     speech = gTTS(text=text, lang=lang, slow=False, tld="ie")
-    output = "output%r.mp3" % (random.sample(range(1, 1000), 1))
-    playsound.playsound(output)  # Play the audio
-    time.sleep(len(text) * 0.06)  # Rough estimation to ensure the event clears after the text is spoken
-    is_speaking.clear()  # Reset the speaking flag
+    if os.path.exists("output.mp3"):
+        os.remove("output.mp3")  # Remove the old audio file if it exists (to avoid a PermissionError)
+    speech.save("output.mp3")  # Save the audio file
+    if os.path.exists("output.mp3"):
+        pygame.mixer.init()
+        pygame.mixer.music.load("output.mp3")
+        pygame.mixer.music.play()
+        while pygame.mixer.music.get_busy():
+            pygame.time.Clock().tick(10)
+        time.sleep(len(text) * 0.01)  # Rough estimation to ensure the event clears after the text is spoken
+        is_speaking.clear()  # Reset the speaking flag
+        pygame.mixer.quit()  # Breaks audio output so file can be deleted created and played again w/o error
+    else:
+        logging.error("gTTS could not create and save speech to file")
+        is_speaking.clear()  # Reset the speaking flag
+        return
 
 
 def get_audio():
